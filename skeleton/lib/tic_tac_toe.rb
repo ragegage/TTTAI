@@ -12,15 +12,15 @@ class Board
   end
 
   def [](pos)
-    x, y = pos[0], pos[1]
-    @rows[x][y]
+    row, col = pos[0], pos[1]
+    @rows[row][col]
   end
 
   def []=(pos, mark)
     raise "mark already placed there!" unless empty?(pos)
 
-    x, y = pos[0], pos[1]
-    @rows[x][y] = mark
+    row, col = pos[0], pos[1]
+    @rows[row][col] = mark
   end
 
   def cols
@@ -39,10 +39,10 @@ class Board
     up_diag = [[0, 2], [1, 1], [2, 0]]
 
     [down_diag, up_diag].map do |diag|
-      # Note the `x, y` inside the block; this unpacks, or
+      # Note the `row, col` inside the block; this unpacks, or
       # "destructures" the argument. Read more here:
       # http://tony.pitluga.com/2011/08/08/destructuring-with-ruby.html
-      diag.map { |x, y| @rows[x][y] }
+      diag.map { |row, col| @rows[row][col] }
     end
   end
 
@@ -152,9 +152,9 @@ class HumanPlayer
     game.show
     while true
       puts "#{@name}: please select your space"
-      x, y = gets.chomp.split(",").map(&:to_i)
-      if HumanPlayer.valid_coord?(x, y)
-        return [x, y]
+      row, col = gets.chomp.split(",").map(&:to_i)
+      if HumanPlayer.valid_coord?(row, col)
+        return [row, col]
       else
         puts "Invalid coordinate!"
       end
@@ -162,8 +162,8 @@ class HumanPlayer
   end
 
   private
-  def self.valid_coord?(x, y)
-    [x, y].all? { |coord| (0..2).include?(coord) }
+  def self.valid_coord?(row, col)
+    [row, col].all? { |coord| (0..2).include?(coord) }
   end
 end
 
@@ -180,10 +180,10 @@ class ComputerPlayer
 
   private
   def winner_move(game, mark)
-    (0..2).each do |x|
-      (0..2).each do |y|
+    (0..2).each do |row|
+      (0..2).each do |col|
         board = game.board.dup
-        pos = [x, y]
+        pos = [row, col]
 
         next unless board.empty?(pos)
         board[pos] = mark
