@@ -129,7 +129,7 @@ class TicTacToe
   end
 
   def play_turn
-    while true
+    loop do
       current_player = self.players[self.turn]
       pos = current_player.move(self, self.turn)
 
@@ -150,7 +150,7 @@ class HumanPlayer
 
   def move(game, mark)
     game.show
-    while true
+    loop do
       puts "#{@name}: please select your space"
       row, col = gets.chomp.split(",").map(&:to_i)
       if HumanPlayer.valid_coord?(row, col)
