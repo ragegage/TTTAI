@@ -198,7 +198,7 @@ class ComputerPlayer
 
   def random_move(game)
     board = game.board
-    while true
+    loop do
       range = (0..2).to_a
       pos = [range.sample, range.sample]
 
