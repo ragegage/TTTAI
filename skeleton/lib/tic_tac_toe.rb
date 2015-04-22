@@ -63,9 +63,7 @@ class Board
   end
 
   def over?
-    # style guide says to use `or`, but I (and most others) prefer to
-    # use `||` all the time. We don't like two ways to do something
-    # this simple.
+    # don't use Ruby's `or` operator; always prefer `||`
     won? || tied?
   end
 
