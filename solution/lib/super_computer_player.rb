@@ -12,7 +12,7 @@ class SuperComputerPlayer < ComputerPlayer
     # The shuffling is optional.
     possible_moves = node.children.shuffle
 
-    # If any move results in a #winning_node? we want to chose that
+    # If any move results in a #winning_node? we want to choose that
     # one. Find picks the first of the winning moves in
     # `possible_moves`.
     node = possible_moves.find{ |child| child.winning_node?(mark) }
