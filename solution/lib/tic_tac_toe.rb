@@ -12,19 +12,24 @@ class Board
   end
 
   def [](pos)
-    row, col = pos[0], pos[1]
+    # Note the assignment of `row, col` to `pos`; this unpacks,
+    # or "destructures" the array. Read more here:
+    # http://tony.pitluga.com/2011/08/08/destructuring-with-ruby.html
+
+    row, col = pos
     @rows[row][col]
   end
 
   def []=(pos, mark)
     raise "mark already placed there!" unless empty?(pos)
 
-    row, col = pos[0], pos[1]
+    row, col = pos
     @rows[row][col] = mark
   end
 
   def cols
     cols = [[], [], []]
+
     @rows.each do |row|
       row.each_with_index do |mark, col_idx|
         cols[col_idx] << mark
@@ -39,10 +44,7 @@ class Board
     up_diag = [[0, 2], [1, 1], [2, 0]]
 
     [down_diag, up_diag].map do |diag|
-      # Note the `row, col` inside the block; this unpacks, or
-      # "destructures" the argument. Read more here:
-      # http://tony.pitluga.com/2011/08/08/destructuring-with-ruby.html
-      diag.map { |row, col| @rows[row][col] }
+      diag.map { |pos| self[pos] }
     end
   end
 
@@ -59,7 +61,7 @@ class Board
     return false if won?
 
     # no empty space?
-    @rows.all? { |row| row.none? { |el| el.nil? }}
+    @rows.all? { |row| row.all? }
   end
 
   def over?
@@ -150,9 +152,14 @@ class HumanPlayer
 
   def move(game, mark)
     game.show
+
     loop do
       puts "#{@name}: please select your space"
-      row, col = gets.chomp.split(",").map(&:to_i)
+
+      row, col = gets.chomp.split(",").map do |coord|
+        Integer(coord)
+      end
+
       if HumanPlayer.valid_coord?(row, col)
         return [row, col]
       else
@@ -182,13 +189,13 @@ class ComputerPlayer
   def winner_move(game, mark)
     (0..2).each do |row|
       (0..2).each do |col|
-        board = game.board.dup
+        dup_board = game.board.dup
         pos = [row, col]
 
-        next unless board.empty?(pos)
-        board[pos] = mark
+        next unless dup_board.empty?(pos)
+        dup_board[pos] = mark
 
-        return pos if board.winner == mark
+        return pos if dup_board.winner == mark
       end
     end
 
@@ -198,6 +205,7 @@ class ComputerPlayer
 
   def random_move(game)
     board = game.board
+
     loop do
       range = (0..2).to_a
       pos = [range.sample, range.sample]
