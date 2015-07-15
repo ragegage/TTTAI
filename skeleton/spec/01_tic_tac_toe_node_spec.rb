@@ -38,7 +38,7 @@ describe TicTacToeNode do
       kid_boards = empty_board_node.children.map{ |kid| kid.board }
       expect(
         kid_boards.none? do |kid_board|
-          kid_board.object_id == empty_board_node.object_id
+          kid_board.object_id == empty_board_node.board.object_id
         end
       ).to eq(true)
     end
