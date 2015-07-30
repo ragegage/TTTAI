@@ -33,8 +33,9 @@ describe SuperComputerPlayer do
   let(:two_moves_to_victory_game) do
     test_board = Board.new
     test_board[[0, 0]] = :x
-    test_board[[2, 2]] = :x
-    test_board[[1, 1]] = :o
+    test_board[[2, 0]] = :x
+    test_board[[1, 0]] = :o
+    test_board[[2, 1]] = :o
     double("TicTacToe", :board => test_board)
   end
 
@@ -46,7 +47,7 @@ describe SuperComputerPlayer do
     it "can pick a winner that is two moves away" do
       move = subject.move(two_moves_to_victory_game, :x)
       expected_moves = [[0, 2], [2, 0]]
-      expect(expected_moves.find(move)).to_not be_nil
+      expect(expected_moves).to include(move)
     end
 
     it "blocks an opponent's winning move" do
