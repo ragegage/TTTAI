@@ -46,7 +46,7 @@ describe SuperComputerPlayer do
 
     it "can pick a winner that is two moves away" do
       move = subject.move(two_moves_to_victory_game, :x)
-      expected_moves = [[0, 2], [2, 0]]
+      expected_moves = [[0, 2], [1, 1]]
       expect(expected_moves).to include(move)
     end
 
