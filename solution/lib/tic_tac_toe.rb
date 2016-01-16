@@ -27,6 +27,30 @@ class Board
     @rows[row][col] = mark
   end
 
+  def open_positions
+    open_positions = []
+
+    @rows.each_with_index do |row, row_index|
+      row.each_with_index do |col, col_index|
+        open_positions.push([row_index, col_index]) unless col
+      end
+    end
+
+    open_positions
+  end
+
+  def next_mark
+    number_of_marks(:x) > number_of_marks(:o) ? :o : :x
+  end
+
+  def number_of_marks(symbol)
+    rows.flatten.inject(0) do |count, spot|
+      count += 1 if spot == symbol
+      count
+    end
+  end
+
+
   def cols
     cols = [[], [], []]
 
@@ -99,7 +123,7 @@ class TicTacToe
   def initialize(player1, player2)
     @board = Board.new
     @players = { :x => player1, :o => player2 }
-    @turn = :x
+    @turn = @board.next_mark
   end
 
   def run
@@ -139,7 +163,7 @@ class TicTacToe
     end
 
     # swap next whose turn it will be next
-    @turn = ((self.turn == :x) ? :o : :x)
+    @turn = self.board.next_mark
   end
 end
 
